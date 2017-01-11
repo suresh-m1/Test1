@@ -30,6 +30,3 @@ function subscribeToEvent( eventType, callback) {
    subscriptions[eventType].push(callback);
    console.log('added subscription for eventtype '+eventType);
 }//subscribeToEvent
-
-
-

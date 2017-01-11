@@ -1,43 +1,16 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:af="http://xmlns.oracle.com/adf/faces/rich">
-    <af:resource type="javascript">
-    subscribeToEvent("color-picker-tf-colorSelectionEvent" , handleColorSelection);
-
-    
-          
-    function handleColorSelection(payload) {
-      console.log("ColorSelectionEvent consumed "+JSON.stringify(payload));
-      var color = payload.selectedColor;
-      console.log("selected color "+color);
-      // get hold of ADF Faces Client Side AdfRichSelectOneRadio object
-      // we use a trick that assumes only one element is rendered in the entire page with a css style class colorRadio
-      // (that also means that page fragment can be included only once and so can the taskflow that this fragment is included in;
-      // for this simple example, that is an acceptable limitation)
-      var htmlElementForRadio = document.getElementsByClassName("colorRadio");
-      // from the HTML element we get the element id and use that as the input for the findComponentByAbsoluteId call that returns the actual ADF Faces AdfRichSelectOneRadio object
-      var radio = AdfPage.PAGE.findComponentByAbsoluteId( htmlElementForRadio[0].id);
-      // the radio group has multiple select items; their labels and values can be retrieved 
-      var sis = radio.getSelectItems();
-      // now we can lookup the value of the select item with the label corresponding to the selected color:
-      for (i = sis.length-1; i>=0; i--) {
-       var si= sis[i];
-       if (si.getLabel().toLowerCase() == color) {
-           radio.setValue(si.getValue());     
-           break;
-       }//if
-      }//for
-    }//handleColorSelection
-
-     
-    </af:resource>
-    <af:panelGridLayout id="pgl1">
+   <af:resource type="javascript" source="/resources/js/menu-taskflow.js"/>
+    <af:panelGridLayout id="pgl1" binding="#{pageFlowScope.menuBean.colorPanelGridLayout}" >
         <af:gridRow height="100%" id="gr1">
-            <af:gridCell width="100%" halign="stretch" valign="stretch" id="gc1">
-                <!-- Content -->
-                <af:selectOneRadio label="Color of your choosing" id="colorRadio" clientComponent="true" styleClass="colorRadio">
+            <af:gridCell width="100%" halign="stretch" valign="stretch" id="gc1"
+                         inlineStyle="background-color:#{pageFlowScope.menuBean.color};">
+                <af:selectOneRadio label="Color of your choosing #{pageFlowScope.menuBean.color}" id="colorRadio"
+                                   clientComponent="true" styleClass="colorRadio">
                     <af:selectItem label="Red" value="red" id="si1"/>
                     <af:selectItem label="Yellow" value="yellow" id="si2"/>
                     <af:selectItem label="Blue" value="blue" id="si3"/>
+                    <af:serverListener type="menuColorSelectionEvent" method="#{pageFlowScope.menuBean.handleColorSelection}"/>
                 </af:selectOneRadio>
             </af:gridCell>
         </af:gridRow>
