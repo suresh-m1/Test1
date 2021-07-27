@@ -13,29 +13,29 @@ public class MenuBean {
         super();
         color="green";
     }
-    
+
     private ComponentReference ColorPanelGridLayout;
     private String color;
-    
+
     public void handleColorSelection(ClientEvent ce){
         // get payload of custom event - that we know should contain the selected color
-        Map<String, Object> map = ce.getParameters();
-        String newColor = (String) map.get("newColor");        
-        setColor(newColor);        
+        Map<String, Object> map1 = ce.getParameters();
+        String newColor = (String) map1.get("newColor");
+        setColor(newColor);
         AdfFacesContext adfFacesContext = AdfFacesContext.getCurrentInstance();
-        adfFacesContext.addPartialTarget(getColorPanelGridLayout());         
+        adfFacesContext.addPartialTarget(getColorPanelGridLayout());
     }
-    
-     
+
+
     public RichPanelGridLayout getColorPanelGridLayout()
     {
       if (ColorPanelGridLayout!=null)
       {
         return (RichPanelGridLayout) ColorPanelGridLayout.getComponent();
       }
-      return null; 
+      return null;
     }
-     
+
     public void setColorPanelGridLayout(RichPanelGridLayout ColorPanelGridLayout)
     {
       this.ColorPanelGridLayout = ComponentReference.newUIComponentReference(ColorPanelGridLayout);
